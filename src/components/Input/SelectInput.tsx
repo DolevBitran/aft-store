@@ -57,6 +57,7 @@ const SelectInput = ({ title, name, control, defaultValue, placeholder, data, on
                     color: '#475a6e',
                     fontSize: 14,
                 }}
+                statusBarTranslucent
                 dropdownOverlayColor={'transparent'}
                 onSelect={(selectedItem, index) => {
                     field.onChange(selectedItem)
