@@ -18,8 +18,13 @@ declare global {
     // ==================== TYPES ====================
 
     type IAsset = ImagePickerAsset & {
+        _id?: string;
         assetId: string;
         fileExtension: string;
+    }
+
+    type Category = {
+        title: string
     }
 
     type AppNavigationContainer = NavigationContainerRef<{
@@ -59,6 +64,11 @@ declare global {
     interface AuthState {
         user: User | null;
         token: string | null;
+    }
+
+    interface ProductsState {
+        categories: Category[]
+        products: ProductData[]
     }
 
     type MediaState = {

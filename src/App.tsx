@@ -24,6 +24,11 @@ import i18n from 'utils/i18n';
 const Stack = createNativeStackNavigator()
 
 const WrappedApp = () => {
+
+
+
+  // load everything and return Loader until load
+
   return <Provider store={store}>
     <App />
   </Provider>
@@ -35,6 +40,7 @@ const App = () => {
 
   React.useEffect(() => {
     dispatch.auth.retrieveUser()
+    dispatch.products.fetchCategories()
   }, [])
 
   React.useEffect(() => {

@@ -13,7 +13,9 @@ let PENDING_REQUESTS = 0
 type BaseUrl = string;
 const baseURL: string =
     // 'https://c531-46-116-226-197.ngrok-free.app'
-    'http://10.100.102.102:8001'
+    // 'http://10.100.102.102:8001'
+    'http://10.100.102.104:8001'
+// 'http:///192.168.1.149:8001'
 
 const axiosPrivate = axios.create({
     baseURL

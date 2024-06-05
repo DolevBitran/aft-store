@@ -60,11 +60,13 @@ export const auth: any = createModel<RootModel>()({
                     dispatch.auth.setUser(data.user)
                 } catch (err) {
                     await removeFromStorage('access_token')
+
                 }
             }
         },
         async requestSignInWithGoogle(response: AuthSessionResult) {
             const user = await AsyncStorage.getItem('@user')
+            console.log(response)
             if (!user) {
                 if (response?.type === 'success' && response.authentication?.accessToken) {
                     saveToStorage('access_token', response.authentication.accessToken)
@@ -84,6 +86,8 @@ export const auth: any = createModel<RootModel>()({
             try {
                 const res: AxiosResponse<UserLoginResponse> = await axios.get('/auth/google/login', { headers: { Authorization: `Bearer ${accessToken}` } })
                 const { data } = res
+                console.log(res)
+
                 await AsyncStorage.setItem('@user', JSON.stringify(data.user))
                 dispatch.auth.setUser(data.user)
                 saveToStorage('access_token', data.accessToken)

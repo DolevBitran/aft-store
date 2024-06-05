@@ -58,8 +58,13 @@ const i18n = new I18n({
 i18n.onChange((i18n: I18n) => {
     store.dispatch.app.changeRTLMode(RTL_LANGUAGES.includes(i18n.locale))
 })
-i18n.defaultLocale = "he";
-i18n.locale = i18n.defaultLocale;
+
+export function changeLanguage(lang: typeof AVAILABLE_LANGUAGES[number]) {
+    i18n.locale = lang;
+}
+
+i18n.defaultLocale = "en";
+changeLanguage(i18n.defaultLocale)
 
 export default i18n;
 // const i18n = new I18n(translations);

@@ -6,13 +6,26 @@ import {
     ScrollView,
     Platform
 } from 'react-native';
-import products from 'mock/products.json';
+import products from 'mock/products2.json';
 import { scale } from 'utils';
 import Header from 'components/Header';
 import ProductList from 'components/ProductList';
 import Text from 'components/Text';
+import { useDispatch, useSelector } from 'react-redux';
+import { Dispatch } from 'store/index';
+import { getProducts } from 'store/selectors/products.selector';
 
 const Home = () => {
+    const dispatch = useDispatch<Dispatch>()
+    const products = useSelector(getProducts)
+
+    React.useEffect(() => {
+        dispatch.products.fetchProducts()
+    }, [])
+
+    const onEndReached = () => {
+        dispatch.products.appendProducts(products)
+    }
 
     const ListTitle = ({ title }: { title: string }) => <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignSelf: 'center', width: '86%', }}>
         <Text style={{ fontWeight: '600', fontSize: 24 }}>{title}</Text>
@@ -21,7 +34,7 @@ const Home = () => {
 
     const HotSales = () => <>
         <ListTitle title="Hot Sales" />
-        <ProductList products={products} />
+        <ProductList onEndReached={onEndReached} products={products} />
     </>
 
     const RecentlyViewed = () => <>

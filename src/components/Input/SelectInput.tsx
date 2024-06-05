@@ -21,8 +21,12 @@ type ProductItemProps = SelectDropdownProps & {
     labelStyle?: TextStyle
     style?: ViewStyle
     placeholder: string
-    data: any[]
+    data: SelectOption[]
     onSelect?: () => void
+}
+
+type SelectOption = {
+    title: string
 }
 
 const SelectInput = ({ title, name, control, defaultValue, placeholder, data, onSelect, style = {}, inputStyle = {}, labelStyle = {}, ...props }: ProductItemProps) => {
@@ -60,7 +64,7 @@ const SelectInput = ({ title, name, control, defaultValue, placeholder, data, on
                 statusBarTranslucent
                 dropdownOverlayColor={'transparent'}
                 onSelect={(selectedItem, index) => {
-                    field.onChange(selectedItem)
+                    field.onChange(selectedItem._id)
                     onSelect && onSelect(selectedItem, index)
                 }}
                 // buttonTextAfterSelection={(selectedItem, index) => {
@@ -74,9 +78,9 @@ const SelectInput = ({ title, name, control, defaultValue, placeholder, data, on
                 //     // if data array is an array of objects then return item.property to represent item in dropdown
                 //     return item
                 // }}
-                renderCustomizedRowChild={(selectedItem: string, index: number, isSelected?: boolean) => {
+                renderCustomizedRowChild={(selectedItem: SelectOption, index: number, isSelected?: boolean) => {
                     return <View style={{ height: 'auto', paddingHorizontal: 8 }}>
-                        <Text style={{ color: '#475a6e' }}>{selectedItem}</Text>
+                        <Text style={{ color: '#475a6e' }}>{selectedItem.title}</Text>
                     </View>
                 }}
                 {...props}

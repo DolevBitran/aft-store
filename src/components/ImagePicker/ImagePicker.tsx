@@ -14,9 +14,10 @@ import { uploadAsset } from 'utils/upload';
 import { uniqueSid } from 'utils';
 
 type ImagePickerComponentProps = {
+    onImagesSelected(result: ImagePicker.ImagePickerResult): void
 }
 
-const ImagePickerComponent = ({ }: ImagePickerComponentProps) => {
+const ImagePickerComponent = ({ onImagesSelected }: ImagePickerComponentProps) => {
     const dispatch = useDispatch<Dispatch>()
 
     const pickImage = async () => {
@@ -30,20 +31,7 @@ const ImagePickerComponent = ({ }: ImagePickerComponentProps) => {
                 base64: true,
                 allowsMultipleSelection: true
             });
-
-            if (result.assets?.length) {
-                const fileExtension = Platform.OS === 'web' ?
-                    result.assets[0].uri.substring("data:image/".length, result.assets[0].uri.indexOf(";base64")) :
-                    result.assets[0].uri.substring(result.assets[0].uri.lastIndexOf('.') + 1);
-
-                const assetsArray: IAsset[] = result.assets.map(asset => ({ ...asset, fileExtension, assetId: uniqueSid() }))
-
-                dispatch.media.appendAssets(assetsArray);
-                const assets = await Promise.all(assetsArray.map(asset => uploadAsset(asset)))
-                console.log(assets)
-                if (!result.canceled) {
-                }
-            }
+            onImagesSelected(result)
         } catch (err) {
             console.error('fn: PickImage', err)
         }

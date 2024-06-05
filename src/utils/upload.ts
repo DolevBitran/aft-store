@@ -76,7 +76,7 @@ export const uploadAsset = async (asset: IAsset) => {
     }
 
     const res = await Promise.all(requests)
-    const newAsset = res.find(result => result.data.asset)?.data?.asset
+    const newAsset: IAsset = res.find(result => result.data.asset)?.data?.asset
     console.log('Upload complete', newAsset);
     return newAsset
   } catch (error) {

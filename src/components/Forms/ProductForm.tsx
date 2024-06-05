@@ -9,7 +9,7 @@ import {
 import i18n from 'utils/i18n';
 import Input, { SelectInput } from 'components/Input';
 import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getMediaAssetArray } from 'store/selectors/media.selector';
 import ImagePicker from 'components/ImagePicker';
 import AnimatedView from 'components/AnimatedView';
@@ -18,6 +18,11 @@ import { SpringValue, useSpringValue } from 'utils/react-spring';
 import UploadItem from 'components/UploadItem';
 import Text from 'components/Text';
 
+import { ImagePickerResult } from 'expo-image-picker';
+import { Dispatch } from 'store/index';
+import { uploadAsset } from 'utils/upload';
+import { uniqueSid } from 'utils';
+import { getCategories } from 'store/selectors/products.selector';
 
 const Paginator = ({ data, scrollX, itemWidth }: { data: IAsset[], scrollX: SpringValue<number>, itemWidth: number }) => {
     const RTL_Mode = useSelector(getRTLMode)
@@ -75,15 +80,36 @@ type ProductFormProps = {
 }
 
 const ProductForm = ({ }: ProductFormProps) => {
+    const dispatch = useDispatch<Dispatch>()
     const assets = useSelector(getMediaAssetArray)
+    const categories = useSelector(getCategories)
+    const [productAssets, setProductAssets] = React.useState<IAsset[]>([])
     const { control, handleSubmit } = useForm()
-    const onSubmit = (data: any) => console.log({ data })
 
-    const categories = ["בדיקה", "אוזניות", "קטגוריה 1", "קטגוריה 2 ", "קטגוריה 3", "קטגוריה 4", "קטגוריה 5", "קטגוריה 6", "קטגוריה 7", "קטגוריה 8", "קטגוריה 9",]
+    const onSubmit = (data: any) => dispatch.product.save({ ...data, media: { images: productAssets.map(asset => asset._id) } })
+    const onImagesSelected = async (result: ImagePickerResult) => {
+        // No permissions request is necessary for launching the image library
+
+        if (result.assets?.length) {
+            const fileExtension = Platform.OS === 'web' ?
+                result.assets[0].uri.substring("data:image/".length, result.assets[0].uri.indexOf(";base64")) :
+                result.assets[0].uri.substring(result.assets[0].uri.lastIndexOf('.') + 1);
+
+            const assetsArray: IAsset[] = result.assets.map(asset => ({ ...asset, fileExtension, assetId: uniqueSid() }))
+
+            dispatch.media.appendAssets(assetsArray);
+            const assets = await Promise.all(assetsArray.map(asset => uploadAsset(asset))) as IAsset[]
+            setProductAssets(state => [...state, ...assets])
+            console.log(assets)
+
+            if (!result.canceled) {
+            }
+        }
+    }
 
     return <>
         <View style={{ flexDirection: 'row', marginVertical: 20 }}>
-            <ImagePicker />
+            <ImagePicker onImagesSelected={onImagesSelected} />
             <ImageUploadGallery assets={assets} />
         </View>
         <Input
@@ -106,12 +132,7 @@ const ProductForm = ({ }: ProductFormProps) => {
                     // text represented after item is selected
                     // if data array is an array of objects then return selectedItem.property to render after item is selected
                     console.log(selectedItem)
-                    return selectedItem
-                }}
-                rowTextForSelection={(item, index) => {
-                    // text represented for each item in dropdown
-                    // if data array is an array of objects then return item.property to represent item in dropdown
-                    return item
+                    return selectedItem.title
                 }}
                 onSelect={console.log}
             />
