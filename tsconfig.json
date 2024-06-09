@@ -1,52 +1,53 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    // "allowSyntheticDefaultImports": true,
-    // "jsx": "react-native",
-    // "lib": [
-    //   "dom",
-    //   "esnext"
-    // ],
-    // "experimentalDecorators": true,
-    // "emitDecoratorMetadata": true,
-    // "moduleResolution": "node",
-    // "module": "commonjs",
-    // "noEmit": true,
-    // "target": "es6",
-    // "skipLibCheck": true,
-    // "resolveJsonModule": true,
     "strict": true,
     "baseUrl": ".",
     "paths": {
+      "@/*": [
+        "./*"
+      ],
       "components/*": [
-        "src/components/*"
+        "components/*"
       ],
       "views/*": [
-        "src/views/*"
+        "views/*"
       ],
       "store": [
-        "src/store/"
+        "store/"
       ],
       "store/*": [
-        "src/store/*"
+        "store/*"
       ],
       "utils": [
-        "src/utils/index.ts"
+        "utils/index.ts"
       ],
       "utils/*": [
-        "src/utils/*"
+        "utils/*"
       ],
       "service/*": [
-        "src/service/*"
+        "service/*"
       ],
       "mock/*": [
-        "src/mock/*"
+        "mock/*"
       ],
       "assets/*": [
         "assets/*"
+      ],
+      "constants/*": [
+        "constants/*"
+      ],
+      "hooks/*": [
+        "hooks/*"
       ]
-    },
+    }
   },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ],
   "exclude": [
     "node_modules"
   ]

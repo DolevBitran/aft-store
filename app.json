@@ -2,51 +2,43 @@
   "expo": {
     "name": "aft-store",
     "slug": "aft-store",
-    "scheme": "com.bitran.aft",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "icon": "./assets/images/icon.png",
+    "scheme": "com.bitran.aft",
+    "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/images/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
     "ios": {
-      "bundleIdentifier": "com.bitran.aft",
       "supportsTablet": true
     },
     "android": {
       "package": "com.bitran.aft",
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png",
-      "bundler": "metro"
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
     },
     "extra": {
       "eas": {
         "projectId": "ba1ced79-1a85-47f0-81a9-d5522517e47e"
       }
     },
-    "updates": {
-      "url": "https://u.expo.dev/ba1ced79-1a85-47f0-81a9-d5522517e47e"
-    },
     "plugins": [
-      [
-        "expo-image-picker",
-        {
-          "photosPermission": "The app accesses your photos to let you share them with your friends."
-        }
-      ],
-      "expo-localization"
-    ]
+      "expo-router",
+      "expo-secure-store"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
   }
 }
