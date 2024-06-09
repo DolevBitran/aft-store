@@ -40,10 +40,16 @@ const SelectInput = ({ title, name, control, defaultValue, placeholder, data, on
         <View style={style}>
             <Text style={[styles.inputLabel, labelStyle]}>{title}</Text>
             <SelectDropdown
+                renderButton={(selectedItem) => {
+                    return (
+                        <View style={styles.textInput}>
+                            <Text style={styles.textInputInnerText}>
+                                {(selectedItem && selectedItem.title) || 'בחר קטגוריה'}
+                            </Text>
+                        </View>
+                    );
+                }}
                 data={data}
-                defaultButtonText={placeholder}
-                buttonStyle={styles.textInput}
-                buttonTextStyle={styles.textInputInnerText}
                 dropdownStyle={{
                     marginTop: 0,
                     borderRadius: 8,
@@ -67,6 +73,9 @@ const SelectInput = ({ title, name, control, defaultValue, placeholder, data, on
                     field.onChange(selectedItem._id)
                     onSelect && onSelect(selectedItem, index)
                 }}
+
+
+
                 // buttonTextAfterSelection={(selectedItem, index) => {
                 //     // text represented after item is selected
                 //     // if data array is an array of objects then return selectedItem.property to render after item is selected
@@ -78,9 +87,9 @@ const SelectInput = ({ title, name, control, defaultValue, placeholder, data, on
                 //     // if data array is an array of objects then return item.property to represent item in dropdown
                 //     return item
                 // }}
-                renderCustomizedRowChild={(selectedItem: SelectOption, index: number, isSelected?: boolean) => {
+                renderItem={(selectedItem: SelectOption, index: number, isSelected?: boolean) => {
                     return <View style={{ height: 'auto', paddingHorizontal: 8 }}>
-                        <Text style={{ color: '#475a6e' }}>{selectedItem.title}</Text>
+                        <Text style={[{ color: '#475a6e' },styles.textInputInnerText]}>{selectedItem.title}</Text>
                     </View>
                 }}
                 {...props}
