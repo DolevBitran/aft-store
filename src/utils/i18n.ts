@@ -63,7 +63,7 @@ export function changeLanguage(lang: typeof AVAILABLE_LANGUAGES[number]) {
     i18n.locale = lang;
 }
 
-i18n.defaultLocale = "en";
+i18n.defaultLocale = "he";
 changeLanguage(i18n.defaultLocale)
 
 export default i18n;

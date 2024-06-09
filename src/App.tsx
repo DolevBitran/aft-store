@@ -48,7 +48,7 @@ const App = () => {
       if (RTL_MODE) {
         I18nManager.allowRTL(true)
         I18nManager.forceRTL(true)
-        // I18nManager.swapLeftAndRightInRTL(true)
+        I18nManager.swapLeftAndRightInRTL(true)
       } else {
         I18nManager.forceRTL(false)
         // I18nManager.swapLeftAndRightInRTL(false)

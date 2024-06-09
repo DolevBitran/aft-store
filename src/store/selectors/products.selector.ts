@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import { iRootState } from '..';
 
 export const getCategories = (state: iRootState): ProductsState['categories'] => state.products.categories
-export const getProducts = (state: iRootState): ProductsState['products'] => state.products.products
+export const getProducts = (state: iRootState): ProductsState['products'] => state.products.products.reverse()
 
 
 // export const getRoom = (state: iRootState): IRoom => ({

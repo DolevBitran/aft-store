@@ -14,6 +14,7 @@ import Text from 'components/Text';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'store/index';
 import { getProducts } from 'store/selectors/products.selector';
+import ProductGrid from 'components/ProductList/ProductGrid';
 
 const Home = () => {
     const dispatch = useDispatch<Dispatch>()
@@ -24,6 +25,7 @@ const Home = () => {
     }, [])
 
     const onEndReached = () => {
+        console.log('onEndReached')
         dispatch.products.appendProducts(products)
     }
 
@@ -34,12 +36,12 @@ const Home = () => {
 
     const HotSales = () => <>
         <ListTitle title="Hot Sales" />
-        <ProductList onEndReached={onEndReached} products={products} />
+        <ProductGrid onEndReached={onEndReached} products={products} />
     </>
 
     const RecentlyViewed = () => <>
         <ListTitle title="Recently Viewed" />
-        <ProductList products={products} />
+        <ProductList onEndReached={onEndReached} products={products} />
     </>
 
     return <ScrollView
@@ -47,9 +49,10 @@ const Home = () => {
         stickyHeaderIndices={Platform.OS === "web" ? undefined : [0]}
         style={[styles.container, { backgroundColor: '#fff' }]}>
         <Header />
-        <View style={{ marginTop: 20 }}>
-            <HotSales />
+        <View style={{ marginTop: 20, flexShrink: 2 }}>
             <RecentlyViewed />
+            {/* <RecentlyViewed />
+            <HotSales /> */}
         </View>
     </ScrollView>
 };
