@@ -8,7 +8,7 @@ import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { AppRegistry, I18nManager, Platform } from 'react-native';
 import { Dispatch, store } from 'store';
-import { getUser } from 'store/selectors/auth.selector';
+import { selectUser } from 'store/selectors/auth.selector';
 
 import 'expo-dev-client';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -25,7 +25,7 @@ SplashScreen.preventAutoHideAsync();
 
 export const unstable_settings = {
   // Ensure any route can link back to `/`
-  initialRouteName: '(auth)',
+  // initialRouteName: '(auth)',
 };
 
 const RootLayout = () => {
@@ -43,11 +43,11 @@ export default RootLayout;
 function App() {
   const dispatch = useDispatch<Dispatch>()
   const RTL_MODE = useSelector(getRTLMode)
-  const user = useSelector(getUser)
+  const user = useSelector(selectUser)
 
   React.useEffect(() => {
     // dispatch.auth.retrieveUser()
-    // dispatch.products.fetchCategories()
+    dispatch.products.fetchCategories()
   }, [])
 
   React.useEffect(() => {
@@ -91,8 +91,9 @@ function App() {
       <SafeAreaView style={{ flex: 1 }}>
         <GestureHandlerRootView style={{ flex: 1, direction: RTLDirection }}>
           <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <Header />
             <Stack
-              initialRouteName='(auth)'
+              // initialRouteName='(auth)'
               screenOptions={{
                 headerShown: true,
                 navigationBarHidden: true,
@@ -100,9 +101,10 @@ function App() {
                 headerBackButtonMenuEnabled: false,
                 headerLeft: () => null,
                 headerRight: () => null,
-                header: () => <Header />,
+                header: () => null,
               }}>
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              {/* <Stack.Screen name="(auth)" options={{ headerShown: false }} /> */}
+              <Stack.Screen name="product" options={{ headerShown: false }} />
               <Stack.Screen name="+not-found" />
             </Stack>
           </ThemeProvider>

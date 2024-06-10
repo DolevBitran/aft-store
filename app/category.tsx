@@ -11,17 +11,23 @@ import Header from 'components/Header';
 import ProductList from 'components/ProductList';
 import Text from 'components/Text';
 import { useDispatch, useSelector } from 'react-redux';
-import { Dispatch } from 'store/index';
-import { selectProducts } from 'store/selectors/products.selector';
+import { Dispatch, iRootState } from 'store/index';
+import { selectCategoriesProducts, selectCategoryById } from 'store/selectors/products.selector';
 import ProductGrid from 'components/ProductList/ProductGrid';
+import { useLocalSearchParams } from 'expo-router';
 
-const Store = () => {
+const Category = () => {
     const dispatch = useDispatch<Dispatch>()
-    const products = useSelector(selectProducts)
+    const { id } = useLocalSearchParams();
+    // const categoryProducts = useSelector(selectProducts)
+    const products = useSelector((state: iRootState) => selectCategoriesProducts(state, id as string))
+    const category = useSelector((state: iRootState) => selectCategoryById(state, id as string))
 
-    React.useEffect(() => {
-        dispatch.products.fetchProducts()
-    }, [])
+    // React.useEffect(() => {
+    //     if (id) {
+    //         dispatch.products.fetchCategoryProducts(id)
+    //     }
+    // }, [id])
 
     const onEndReached = () => {
         console.log('onEndReached')
@@ -34,7 +40,7 @@ const Store = () => {
     </View>
 
     const HotSales = () => <>
-        <ListTitle title="Hot Sales" />
+        <ListTitle title={category.title} />
         <ProductGrid onEndReached={onEndReached} products={products} />
     </>
 
@@ -43,20 +49,25 @@ const Store = () => {
         <ProductList products={products} />
     </>
 
+    if (!category) {
+        console.log({ category, id })
+        return null
+    }
+
     return <ScrollView
         stickyHeaderHiddenOnScroll={true}
         stickyHeaderIndices={Platform.OS === "web" ? undefined : [0]}
         style={[styles.container, { backgroundColor: '#fff' }]}>
         {/* <Header /> */}
         <View style={{ marginTop: 20, flexShrink: 2 }}>
-            <RecentlyViewed />
-            <RecentlyViewed />
+            {/* <RecentlyViewed /> */}
+            {/* <RecentlyViewed /> */}
             <HotSales />
         </View>
     </ScrollView>
 };
 
-export default Store;
+export default Category;
 
 const styles = StyleSheet.create({
     container: {

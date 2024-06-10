@@ -24,7 +24,8 @@ declare global {
     }
 
     type Category = {
-        title: string
+        title: string;
+        _id: string;
     }
 
     type AppNavigationContainer = NavigationContainerRef<{
@@ -101,9 +102,22 @@ declare global {
 
     type ProductData = {
         title: string
+        category: Category[]
         price: number
-        description: string,
-        id: string
+        description: string
+        _id: string
+        media: {
+            images: ImageData[]
+            videos?: VideoData[]
+        }
+    }
+
+    type ImageData = {
+        source: string
+    }
+
+    type VideoData = {
+        source: string
     }
 
     // ==================== PAYLOADS ====================

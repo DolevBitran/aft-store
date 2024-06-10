@@ -17,14 +17,14 @@ import { Dispatch } from 'store';
 
 import * as Svg from 'react-native-svg';
 import { scale } from 'utils';
-import { getUser } from 'store/selectors/auth.selector';
+import { selectUser } from 'store/selectors/auth.selector';
 import i18n from 'utils/i18n';
 
 WebBrowser.maybeCompleteAuthSession();
 
 const Login = () => {
     const dispatch = useDispatch<Dispatch>()
-    const user = useSelector(getUser)
+    const user = useSelector(selectUser)
     const [userInfo, setUserInfo] = React.useState<any>(null);
     const [request, response, promptAsync] = Google.useAuthRequest({
         androidClientId: '352900253507-gmmrpjkbv0bv2md6ee6nn4ad0bj4gen5.apps.googleusercontent.com',

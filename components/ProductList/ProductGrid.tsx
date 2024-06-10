@@ -21,7 +21,7 @@ type ProductGridProps = {
 
 const ProductGrid = ({ onEndReached, products }: ProductGridProps) => {
     const dispatch = useDispatch<Dispatch>()
-    const onPress = (product: ProductData) => dispatch.app.navigateTo({ name: 'Product', params: { id: product.id } })
+    const onPress = (product: ProductData) => dispatch.app.navigateTo({ name: 'product', params: { id: product._id } })
 
     return (
         <FlatList

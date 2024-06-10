@@ -1,9 +1,22 @@
 import { createSelector } from 'reselect';
 import { iRootState } from '..';
 
-export const getCategories = (state: iRootState): ProductsState['categories'] => state.products.categories
-export const getProducts = (state: iRootState): ProductsState['products'] => state.products.products.reverse()
-export const getProduct = (state: iRootState): ProductState['product'] => state.product.product
+export const selectProduct = (state: iRootState): ProductState['product'] => state.product.product
+export const selectCategories = (state: iRootState) => state.products.categories
+export const selectProducts = (state: iRootState) => state.products.products
+
+
+const selectCategoryId = (state: iRootState, categoryId: string) => categoryId
+
+export const selectCategoryById = createSelector(
+    [selectCategories, selectCategoryId],
+    (categories, categoryId) => categories.find((c: Category) => c._id === categoryId)
+)
+
+export const selectCategoriesProducts = createSelector(
+    [selectProducts, selectCategoryId],
+    (products, categoryId) => products.filter((product: ProductData) => product.category.find(c => c._id === categoryId))
+)
 
 
 // export const getRoom = (state: iRootState): IRoom => ({

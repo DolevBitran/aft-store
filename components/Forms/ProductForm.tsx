@@ -22,7 +22,7 @@ import { ImagePickerResult } from 'expo-image-picker';
 import { Dispatch } from 'store/index';
 import { uploadAsset } from 'utils/upload';
 import { uniqueSid } from 'utils';
-import { getCategories } from 'store/selectors/products.selector';
+import { selectCategories } from 'store/selectors/products.selector';
 
 const Paginator = ({ data, scrollX, itemWidth }: { data: IAsset[], scrollX: SpringValue<number>, itemWidth: number }) => {
     const RTL_Mode = useSelector(getRTLMode)
@@ -82,7 +82,7 @@ type ProductFormProps = {
 const ProductForm = ({ }: ProductFormProps) => {
     const dispatch = useDispatch<Dispatch>()
     const assets = useSelector(getMediaAssetArray)
-    const categories = useSelector(getCategories)
+    const categories = useSelector(selectCategories)
     const [productAssets, setProductAssets] = React.useState<IAsset[]>([])
     const { control, handleSubmit } = useForm()
 
@@ -128,12 +128,6 @@ const ProductForm = ({ }: ProductFormProps) => {
                 control={control}
                 data={categories}
                 placeholder={i18n.translate('productForm.selectCategory')}
-                buttonTextAfterSelection={(selectedItem, index) => {
-                    // text represented after item is selected
-                    // if data array is an array of objects then return selectedItem.property to render after item is selected
-                    console.log(selectedItem)
-                    return selectedItem.title
-                }}
                 onSelect={console.log}
             />
             <View style={{ width: 20 }} />

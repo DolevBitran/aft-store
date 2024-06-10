@@ -2,7 +2,6 @@ import React from 'react'
 import {
     View,
     StyleSheet,
-    StyleProp,
     ViewStyle,
     ScrollView,
     Pressable,
@@ -11,11 +10,12 @@ import {
 import IconContainer from 'components/IconContainer';
 import CategoryItem from 'components/CategoryItem';
 import Text from 'components/Text';
-import { useDispatch, useSelector } from 'react-redux';
-import { Dispatch } from 'store';
-import { getUser } from 'store/selectors/auth.selector';
 import i18n from 'utils/i18n';
-import { getCategories } from 'store/selectors/products.selector';
+import { Dispatch } from 'store';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUser } from 'store/selectors/auth.selector';
+import { selectCategories } from 'store/selectors/products.selector';
+import { router, usePathname } from 'expo-router';
 
 type HeaderProps = {
     style?: ViewStyle
@@ -29,7 +29,7 @@ const SearchBarInput = () => (
 )
 
 const Avatar = () => {
-    const user = useSelector(getUser)
+    const user = useSelector(selectUser)
 
     return <View style={styles.avatarContainer}>
         {user?.picture ?
@@ -56,7 +56,16 @@ const SearchBarContainer = () => {
 }
 
 const FilterContainer = () => {
-    const categories = useSelector(getCategories);
+    const categories = useSelector(selectCategories);
+    const dispatch = useDispatch<Dispatch>()
+    const route = usePathname();
+    const onSelectCategory = (id: string) => {
+        if (categoryRoutes.includes(route)) {
+            return router.setParams({ id })
+        }
+        dispatch.app.navigateTo({ name: 'category', params: { id: id } })
+    }
+    const categoryRoutes = ['/category']
 
     return <>
         <View style={styles.filterContainer}>
@@ -64,7 +73,9 @@ const FilterContainer = () => {
             <View style={{ width: 20 }} />
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {categories.map((c, i) => <View key={i} style={{ flexDirection: 'row' }}>
-                    <CategoryItem category={c} />
+                    <Pressable onPress={() => onSelectCategory(c._id)}>
+                        <CategoryItem category={c} />
+                    </Pressable>
                     <View style={{ width: 15 }} />
                 </View>)}
             </ScrollView>
@@ -80,16 +91,24 @@ const Hr = () => <View
     }}
 />
 
-const HeaderContainer = ({ style = {} }: HeaderProps) =>
-    <View style={[styles.headerContainer]}>
-        <View>
-            <View style={[{ width: '100%' }, style]}>
-                <SearchBarContainer />
-                <FilterContainer />
+const HeaderContainer = ({ style = {} }: HeaderProps) => {
+    const route = usePathname();
+    console.log({ route })
+    const cleanRoutes = ['/product', '/']
+    if (cleanRoutes.includes(route)) {
+        return null
+    }
+    return (
+        <View style={[styles.headerContainer]} >
+            <View>
+                <View style={[{ width: '100%' }, style]}>
+                    <SearchBarContainer />
+                    <FilterContainer />
+                </View>
             </View>
-        </View>
-        <Hr />
-    </View>
+            <Hr />
+        </View>)
+}
 
 export default HeaderContainer;
 

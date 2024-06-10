@@ -39,6 +39,16 @@ export const products: any = createModel<RootModel>()({
 
             }
         },
+        async fetchCategoryProducts(payload) {
+            try {
+                const res = await axios.get(`/api/product?category=${payload}`)
+                console.log(res.data)
+                // this.SET_PRODUCTS(res.data.products)
+                // this.SET_CATEGORIES(res.data.categories)
+            } catch (err) {
+
+            }
+        },
         async fetchCategoriesPreview(payload) {
             try {
                 const res = await axios.get('/api/category/preview')

@@ -2,4 +2,5 @@ import { createSelector } from 'reselect';
 import { iRootState } from '..';
 
 
-export const getUser = (state: iRootState): User | null => state.auth.user;
+export const selectUser = (state: iRootState): User | null => state.auth.user;
+// export const selectUser = createSelector(selectUser, (user => user))

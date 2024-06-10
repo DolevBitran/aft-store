@@ -13,21 +13,20 @@ import { scale } from 'utils';
 import Header from 'components/Header';
 import ProductList from 'components/ProductList';
 import Text from 'components/Text';
-import { useRoute } from '@react-navigation/native';
 import AnimatedView, { useSpring } from 'components/AnimatedView';
 import SkeletonItem from 'components/SkeletonItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from '@/store';
-import { getProduct } from '@/store/selectors/products.selector';
+import { selectProduct } from '@/store/selectors/products.selector';
 
+import { useLocalSearchParams } from 'expo-router';
 
 const wWidth = Dimensions.get('window').width
 
 const Product = () => {
     const dispatch = useDispatch<Dispatch>()
-    const route = useRoute()
-    const product = useSelector(getProduct)
-    const id = route?.params?.id
+    const product = useSelector(selectProduct)
+    const { id } = useLocalSearchParams()
     const descriptionStyle = { width: 300, height: 14, borderRadius: 3, margin: 30, marginTop: 5, marginBottom: 5 };
 
     const isProductLoaded = product?._id && product._id === id

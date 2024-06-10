@@ -3,15 +3,13 @@ import {
     StyleSheet,
     FlatList,
     Pressable,
-    I18nManager,
     Platform,
     View,
     ActivityIndicator
 } from 'react-native';
 import ProductItem from 'components/ProductItem';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Dispatch, store } from 'store/index';
-import { getProducts } from 'store/selectors/products.selector';
 import Text from '../Text';
 
 type ProductListProps = {
@@ -39,7 +37,10 @@ const ProductList = ({ onEndReached, products }: ProductListProps) => {
             horizontal
             showsHorizontalScrollIndicator={false}
             inverted={isRTL}
-            initialScrollIndex={isRTL && Platform.OS !== 'web' ? products.length - 1 : 0}
+            initialScrollIndex={isRTL && Platform.OS !== 'web' ? Math.max(products.length - 1, 0) : 0}
+            getItemLayout={(data, index) => (
+                { length: 178, offset: 178 * index, index }
+            )}
             // onViewableItemsChanged={ }
             // onScroll={e => console.log({ contentOffsetX: e.nativeEvent.contentOffset.x, contentWidth: e.nativeEvent.contentSize.width, layoutWidth: e.nativeEvent.layoutMeasurement.width, total: e.nativeEvent.layoutMeasurement.width - e.nativeEvent.contentOffset.x })}
             onEndReached={(info) => {

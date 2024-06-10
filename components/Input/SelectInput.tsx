@@ -11,9 +11,7 @@ import { Control, useController } from 'react-hook-form';
 import { store } from 'store/index';
 import SelectDropdown, { SelectDropdownProps } from 'react-native-select-dropdown';
 
-type SelectDropdownPropsOmitted = Omit<SelectDropdownProps, "onSelect">
-
-type ProductItemProps = SelectDropdownProps & {
+type ProductItemProps = {
     title: string
     name: string
     control: Control
@@ -23,13 +21,15 @@ type ProductItemProps = SelectDropdownProps & {
     placeholder: string
     data: SelectOption[]
     onSelect?: () => void
-}
+    renderButton?: any
+    renderItem?: any
+} & Omit<SelectDropdownProps, "renderItem" | "renderButton">
 
 type SelectOption = {
     title: string
 }
 
-const SelectInput = ({ title, name, control, defaultValue, placeholder, data, onSelect, style = {}, inputStyle = {}, labelStyle = {}, ...props }: ProductItemProps) => {
+const SelectInput = ({ title, name, control, defaultValue, placeholder, data, onSelect, style = {}, inputStyle = {}, labelStyle = {}, renderButton, renderItem, ...props }: ProductItemProps) => {
     const { field } = useController({
         control,
         defaultValue: defaultValue || '',
@@ -40,15 +40,6 @@ const SelectInput = ({ title, name, control, defaultValue, placeholder, data, on
         <View style={style}>
             <Text style={[styles.inputLabel, labelStyle]}>{title}</Text>
             <SelectDropdown
-                renderButton={(selectedItem) => {
-                    return (
-                        <View style={styles.textInput}>
-                            <Text style={styles.textInputInnerText}>
-                                {(selectedItem && selectedItem.title) || 'בחר קטגוריה'}
-                            </Text>
-                        </View>
-                    );
-                }}
                 data={data}
                 dropdownStyle={{
                     marginTop: 0,
@@ -56,40 +47,35 @@ const SelectInput = ({ title, name, control, defaultValue, placeholder, data, on
                     height: 'auto',
                     maxHeight: 200
                 }}
-                rowStyle={{
-                    paddingVertical: 5,
-                    margin: 0,
-                    height: 36,
-                    borderBottomWidth: 0,
-                    borderTopWidth: 0
-                }}
-                rowTextStyle={{
-                    color: '#475a6e',
-                    fontSize: 14,
-                }}
                 statusBarTranslucent
                 dropdownOverlayColor={'transparent'}
                 onSelect={(selectedItem, index) => {
                     field.onChange(selectedItem._id)
                     onSelect && onSelect(selectedItem, index)
                 }}
-
-
-
-                // buttonTextAfterSelection={(selectedItem, index) => {
-                //     // text represented after item is selected
-                //     // if data array is an array of objects then return selectedItem.property to render after item is selected
-                //     console.log(selectedItem)
-                //     return selectedItem
-                // }}
-                // rowTextForSelection={(item, index) => {
-                //     // text represented for each item in dropdown
-                //     // if data array is an array of objects then return item.property to represent item in dropdown
-                //     return item
-                // }}
+                renderButton={(selectedItem) => {
+                    return (
+                        <View style={styles.textInput}>
+                            <Text style={styles.textInputInnerText}>
+                                {(selectedItem && selectedItem.title) || placeholder}
+                            </Text>
+                        </View>
+                    );
+                }}
                 renderItem={(selectedItem: SelectOption, index: number, isSelected?: boolean) => {
-                    return <View style={{ height: 'auto', paddingHorizontal: 8 }}>
-                        <Text style={[{ color: '#475a6e' },styles.textInputInnerText]}>{selectedItem.title}</Text>
+                    return <View style={{
+                        height: 'auto',
+                        paddingHorizontal: 8,
+                        paddingVertical: 5,
+                        margin: 0,
+                        // height: 36,
+                        borderBottomWidth: 0,
+                        borderTopWidth: 0
+                    }}>
+                        <Text style={[{
+                            color: '#475a6e',
+                            fontSize: 14,
+                        }, styles.textInputInnerText]}>{selectedItem.title}</Text>
                     </View>
                 }}
                 {...props}
@@ -122,7 +108,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         height: 'auto',
         width: 'auto',
-        outlineStyle: 'none',
+        // outlineStyle: 'none',
     },
     textInputInnerText: {
         height: 'auto',
