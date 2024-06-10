@@ -72,7 +72,7 @@ const FilterContainer = () => {
             <IconContainer />
             <View style={{ width: 20 }} />
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {categories.map((c, i) => <View key={i} style={{ flexDirection: 'row' }}>
+                {categories.map((c: Category, i: number) => <View key={i} style={{ flexDirection: 'row' }}>
                     <Pressable onPress={() => onSelectCategory(c._id)}>
                         <CategoryItem category={c} />
                     </Pressable>
