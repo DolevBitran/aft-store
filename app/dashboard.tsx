@@ -45,7 +45,7 @@ const Dashboard = () => {
     const StoreOverview = ({ buttonTitle, buttonAction }: { buttonTitle: string, buttonAction: () => void }) => <Card title={i18n.translate('storeOverview')} bgColor='#000000' fontColor='white' cardStyle={{ marginTop: 20 }}>
         <>
             <Text style={{ fontSize: 14, color: 'white', alignSelf: 'flex-start' }}>{i18n.translate('storeOverviewText', { count: 124 })}</Text>
-            <Pressable onPress={buttonAction} style={{ backgroundColor: 'white', alignSelf: 'flex-start', borderRadius: 4, paddingVertical: 4, paddingHorizontal: 8, marginTop: 12 }}>
+            <Pressable role="button" onPress={buttonAction} style={{ backgroundColor: 'white', alignSelf: 'flex-start', borderRadius: 4, paddingVertical: 4, paddingHorizontal: 8, marginTop: 12 }}>
                 <Text style={{ fontSize: 16, color: "#574ba1" }}>{i18n.translate('goToStoreButton')}</Text>
             </Pressable>
         </>
@@ -54,7 +54,7 @@ const Dashboard = () => {
     const RecentOrders = () => <Card title={i18n.translate('storeOverview')} bgColor='#ddc5b4' fontColor='#000000' cardStyle={{ marginTop: 20 }}>
         <>
             <Text style={{ fontSize: 14, color: 'black', alignSelf: 'flex-start' }}>{i18n.translate('storeOverviewText', { count: 124 })}</Text>
-            <Pressable onPress={onCreateButtonPressed} style={{ backgroundColor: 'white', alignSelf: 'flex-start', borderRadius: 4, paddingVertical: 4, paddingHorizontal: 8, marginTop: 12 }}>
+            <Pressable role="button" onPress={onCreateButtonPressed} style={{ backgroundColor: 'white', alignSelf: 'flex-start', borderRadius: 4, paddingVertical: 4, paddingHorizontal: 8, marginTop: 12 }}>
                 <Text style={{ fontSize: 16, color: "#574ba1" }}>{i18n.translate('newProductButton')}</Text>
             </Pressable>
         </>
