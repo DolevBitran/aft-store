@@ -30,6 +30,9 @@ const i18n = new I18n({
             selectCategory: 'Choose category',
             description: 'Product Description',
             submit: 'Add Product',
+        },
+        productPage: {
+            addToCart: 'Add To Cart'
         }
     },
     he: {
@@ -51,6 +54,9 @@ const i18n = new I18n({
             selectCategory: 'בחר קטגוריה',
             description: 'תיאור',
             submit: 'הוסף מוצר',
+        },
+        productPage: {
+            addToCart: 'הוסף לעגלה'
         }
     },
 });

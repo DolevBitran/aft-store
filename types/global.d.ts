@@ -70,10 +70,17 @@ declare global {
     interface ProductsState {
         categories: Category[]
         products: ProductData[]
+        categoryProducts: {
+            [categoryId: string]: ProductData[]
+        }
     }
 
     interface ProductState {
         product: ProductData | null
+    }
+
+    interface CartState {
+        cartItems: CartItem[]
     }
 
     type MediaState = {
@@ -110,6 +117,12 @@ declare global {
             images: ImageData[]
             videos?: VideoData[]
         }
+    }
+
+    type CartItem = {
+        productId: string
+        sessionId: string
+        product: ProductData
     }
 
     type ImageData = {
