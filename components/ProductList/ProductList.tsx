@@ -47,7 +47,6 @@ const ProductList = ({ onEndReached, products }: ProductListProps) => {
                 console.log('onEndReached called!')
                 onEndReached && onEndReached(info)
             }}
-            onStartReachedThreshold={0.8}
             onEndReachedThreshold={0.1}
             maintainVisibleContentPosition={{
                 minIndexForVisible: 0,

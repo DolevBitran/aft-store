@@ -18,7 +18,7 @@ const SkeletonItem = ({ styleProps: style }: { styleProps: { width: number, heig
             config: {
                 duration: 1000,
             },
-            delay: 300
+            // delay: 300
         }),
         []
     )

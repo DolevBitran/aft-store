@@ -25,11 +25,11 @@ const ProductGrid = ({ onEndReached, products }: ProductGridProps) => {
 
     return (
         <FlatList
-            initialNumToRender={products.length * 10}
+            initialNumToRender={products?.length || 0}
             nestedScrollEnabled
             style={styles.productGrid}
             contentContainerStyle={styles.gridStyles}
-            data={[...products, ...products, ...products, ...products, ...products, ...products, ...products, ...products, ...products, ...products,]}
+            data={products}
             renderItem={({ item: product }: { item: ProductData }) => <Pressable onPress={() => onPress(product)}>
                 <ProductItem product={product} key={product._id} />
             </Pressable>}
@@ -38,8 +38,10 @@ const ProductGrid = ({ onEndReached, products }: ProductGridProps) => {
             // onViewableItemsChanged={ }
             // onScroll={e => console.log({ contentOffsetX: e.nativeEvent.contentOffset.x, contentWidth: e.nativeEvent.contentSize.width, layoutWidth: e.nativeEvent.layoutMeasurement.width, total: e.nativeEvent.layoutMeasurement.width - e.nativeEvent.contentOffset.x })}
             onEndReached={(info) => {
-                console.log('onEndReached called!', info)
-                onEndReached && onEndReached(info)
+                if (products.length >= 10) {
+                    console.log('onEndReached called!', info)
+                    onEndReached && onEndReached(info)
+                }
             }}
             numColumns={2}
             onEndReachedThreshold={0.1}

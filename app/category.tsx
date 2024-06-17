@@ -6,8 +6,6 @@ import {
     ScrollView,
     Platform
 } from 'react-native';
-import { scale } from 'utils';
-import Header from 'components/Header';
 import ProductList from 'components/ProductList';
 import Text from 'components/Text';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,20 +16,26 @@ import { useLocalSearchParams } from 'expo-router';
 
 const Category = () => {
     const dispatch = useDispatch<Dispatch>()
-    const { id } = useLocalSearchParams();
-    // const categoryProducts = useSelector(selectProducts)
+    const { id } = useLocalSearchParams()
     const products = useSelector((state: iRootState) => selectCategoriesProducts(state, id as string))
     const category = useSelector((state: iRootState) => selectCategoryById(state, id as string))
+    const [page, setPage] = React.useState<number>(1)
 
-    // React.useEffect(() => {
-    //     if (id) {
-    //         dispatch.products.fetchCategoryProducts(id)
-    //     }
-    // }, [id])
+    React.useEffect(() => {
+        if (id && !products?.length) {
+            dispatch.products.fetchCategoryProducts({ categoryId: id, page: 1 })
+            setPage(1)
+        }
+    }, [id])
 
     const onEndReached = () => {
         console.log('onEndReached')
-        // dispatch.products.appendProducts(products)
+        const shouldFetchMore = products?.length && products.length / (page - 1) === 10
+        setPage(page => page + 1)
+        if (shouldFetchMore) {
+            console.log('shouldFetchMore')
+            // dispatch.products.appendProducts(products)
+        }
     }
 
     const ListTitle = ({ title }: { title: string }) => <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignSelf: 'center', width: '86%', }}>
@@ -41,7 +45,7 @@ const Category = () => {
 
     const HotSales = () => <>
         <ListTitle title={category.title} />
-        <ProductGrid onEndReached={onEndReached} products={products} />
+        <ProductGrid onEndReached={onEndReached} products={products || []} />
     </>
 
     const RecentlyViewed = () => <>
