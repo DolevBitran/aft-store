@@ -29,3 +29,10 @@ jobs:
         uses: expo/expo-github-action/preview-build@main
         with:
           command: eas build --profile preview --platform all
+
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: expo-artifacts
+          path: '**/*.apk'  # Adjust the path to match the location of your APKs
+          
