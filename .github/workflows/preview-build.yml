@@ -15,27 +15,31 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-    
+
       - name: 🏗  Setup EAS
         uses: expo/expo-github-action@v8
         with:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
-    
-      - name: Install dependencies
-        run: npm install
-    
-      - name: Create preview builds if needed
-        uses: expo/expo-github-action/preview-build@main
-        with:
-          command: eas build --profile preview --platform android --verbose
 
-      - name: List files
-        run: ls -l ./
-        
+      - name: Install dependencies
+        run: npx expo install
+
+      - name: Create preview builds if needed
+        run: eas build --profile preview --platform all --verbose
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+
+      - name: List potential APK directories
+        run: |
+          ls -R android/
+          ls -R app/
+          ls -R build/
+          ls -R outputs/
+          ls -R apk/
+
       - name: Archive artifacts
         uses: actions/upload-artifact@v2
         with:
           name: expo-artifacts
-          path: '**/*.apk'  # Adjust the path to match the location of your APKs
-          
+          path: /**/*.apk 
