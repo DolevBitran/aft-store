@@ -2,8 +2,6 @@ on:
   push:
     # REQUIRED: push main(default) branch is necessary for this action to update its fingerprint database
     branches: [main]
-  pull_request:
-    types: [opened, synchronize]
 
 jobs:
   build-preview:
