@@ -30,16 +30,14 @@ jobs:
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
-      - name: List potential APK directories
-        run: |
-          ls -R android/
-          ls -R app/
-          ls -R build/
-          ls -R outputs/
-          ls -R apk/
+      # Wait for build to complete on Expo's servers
+      # GitHub Actions automatically waits for each step to complete
 
-      - name: Archive artifacts
-        uses: actions/upload-artifact@v2
+      - name: Download Expo artifacts
+        uses: actions/download-artifact@v2
         with:
           name: expo-artifacts
-          path: /**/*.apk 
+          path: ./artifacts
+
+      - name: List downloaded artifacts
+        run: ls -R ./artifacts
