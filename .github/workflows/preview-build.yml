@@ -23,7 +23,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Install dependencies
-        run: npx expo install
+        run: npm install
 
       - name: Create preview builds if needed
         run: eas build --profile preview --platform all --verbose
