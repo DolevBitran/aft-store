@@ -34,5 +34,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: expo-artifacts
-          path: '**/*.apk'  # Adjust the path to match the location of your APKs
+          path: 'android/app/build/outputs/apk/**/*.apk'  # Adjust the path to match the location of your APKs
           
