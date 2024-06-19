@@ -30,9 +30,15 @@ jobs:
         with:
           command: eas build --profile preview --platform all
 
+      - name: List APK files
+        run: ls -l android/app/build/outputs/apk/
+
+      - name: List files
+        run: ls -l ./
+        
       - name: Archive artifacts
         uses: actions/upload-artifact@v2
         with:
           name: expo-artifacts
-          path: 'android/app/build/outputs/apk/**/*.apk'  # Adjust the path to match the location of your APKs
+          path: '*.apk'  # Adjust the path to match the location of your APKs
           
