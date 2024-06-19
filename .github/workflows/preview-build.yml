@@ -1,0 +1,33 @@
+on:
+  push:
+    # REQUIRED: push main(default) branch is necessary for this action to update its fingerprint database
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  build-preview:
+    runs-on: ubuntu-latest
+    permissions:
+      # REQUIRED: Allow updating fingerprint in acton caches
+      actions: write
+      # Following permissions are required for private repos
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+    
+      - name: 🏗  Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+    
+      - name: Install dependencies
+        run: npm install
+    
+      - name: Create preview builds if needed
+        uses: expo/expo-github-action/preview-build@main
+        with:
+          command: eas build --profile preview --platform all
