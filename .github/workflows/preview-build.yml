@@ -1,15 +1,13 @@
 on:
   push:
-    # REQUIRED: push main(default) branch is necessary for this action to update its fingerprint database
-    branches: [main]
-  pull_request:
-    types: [opened, synchronize]
+    branches:
+     - master
 
 jobs:
   build-preview:
     runs-on: ubuntu-latest
     permissions:
-      # REQUIRED: Allow updating fingerprint in acton caches
+      # REQUIRED: Allow updating fingerprint in action caches
       actions: write
       # Following permissions are required for private repos
       contents: read
@@ -17,17 +15,29 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-    
+
       - name: 🏗  Setup EAS
         uses: expo/expo-github-action@v8
         with:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
-    
+
       - name: Install dependencies
         run: npm install
-    
+
       - name: Create preview builds if needed
-        uses: expo/expo-github-action/preview-build@main
+        run: eas build --profile preview --platform android
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+
+      # Wait for build to complete on Expo's servers
+      # GitHub Actions automatically waits for each step to complete
+
+      - name: Download Expo artifacts
+        uses: actions/download-artifact@v2
         with:
-          command: eas build --profile preview --platform all
+          name: expo-artifacts
+          path: ./artifacts
+
+      - name: List downloaded artifacts
+        run: ls -R ./artifacts
