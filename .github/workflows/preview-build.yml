@@ -1,7 +1,7 @@
 on:
   push:
-    # REQUIRED: push main(default) branch is necessary for this action to update its fingerprint database
-    branches: [main]
+    branches:
+     - master
 
 jobs:
   build-preview:
