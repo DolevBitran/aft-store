@@ -33,6 +33,11 @@ const i18n = new I18n({
         },
         productPage: {
             addToCart: 'Add To Cart'
+        },
+        cart: {
+            checkout: 'Secure Checkout',
+            loading: 'Loading Cart...',
+            empty: 'Oops! your cart is empty...',
         }
     },
     he: {
@@ -57,6 +62,11 @@ const i18n = new I18n({
         },
         productPage: {
             addToCart: 'הוסף לעגלה'
+        },
+        cart: {
+            checkout: 'המשך לתשלום מאובטח',
+            loading: 'העגלה בטעינה...',
+            empty: 'אופס! העגלה ריקה...',
         }
     },
 });

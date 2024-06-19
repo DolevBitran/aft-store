@@ -15,7 +15,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
     return (
         <View style={styles.productItem}>
             <View style={styles.productItemImage}>
-                <Image style={styles.amitImage} resizeMode='contain' source={{ uri: product.media.images[0].source }} />
+                <Image style={styles.productImage} resizeMode='contain' source={{ uri: product.media.images[0].source }} />
             </View>
             <View style={styles.productInfo}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         overflow: 'hidden',
     },
-    amitImage: {
+    productImage: {
         height: '100%',
         width: '100%'
     },

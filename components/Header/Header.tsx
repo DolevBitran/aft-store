@@ -45,7 +45,6 @@ const Avatar = () => {
 const SearchBarContainer = () => {
     const dispatch = useDispatch<Dispatch>()
 
-
     return <View style={styles.searchBarContainer}>
         <Pressable onPress={() => dispatch.auth.logoutUser()}>
             <Avatar />
@@ -59,20 +58,24 @@ const FilterContainer = () => {
     const categories = useSelector(selectCategories);
     const dispatch = useDispatch<Dispatch>()
     const route = usePathname();
+    const categoryRoutes = ['/category']
+
+    const onCartPressed = () => dispatch.app.navigateTo({ name: 'cart' })
     const onSelectCategory = (id: string) => {
         if (categoryRoutes.includes(route)) {
             return router.setParams({ id })
         }
         dispatch.app.navigateTo({ name: 'category', params: { id: id } })
     }
-    const categoryRoutes = ['/category']
 
     return <>
         <View style={styles.filterContainer}>
-            <IconContainer />
+            <Pressable onPress={onCartPressed}>
+                <IconContainer />
+            </Pressable>
             <View style={{ width: 20 }} />
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {categories.map((c: Category, i: number) => <View key={i} style={{ flexDirection: 'row' }}>
+                {categories.map((c: Category, i: number) => <View key={c._id} style={{ flexDirection: 'row' }}>
                     <Pressable onPress={() => onSelectCategory(c._id)}>
                         <CategoryItem category={c} />
                     </Pressable>
@@ -93,11 +96,12 @@ const Hr = () => <View
 
 const HeaderContainer = ({ style = {} }: HeaderProps) => {
     const route = usePathname();
-    console.log({ route })
     const cleanRoutes = ['/product', '/']
+
     if (cleanRoutes.includes(route)) {
         return null
     }
+
     return (
         <View style={[styles.headerContainer]} >
             <View>

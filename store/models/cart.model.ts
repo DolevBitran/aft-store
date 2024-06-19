@@ -7,18 +7,16 @@ import axios from 'service/api';
 
 
 const INITIAL_STATE: CartState = {
-    cartItems: []
+    cartItems: null
 };
 
 export const cart: any = createModel<RootModel>()({
     name: 'cart',
     state: INITIAL_STATE,
     reducers: {
-        // SET_CATEGORIES: (state: ProductsState, payload: ProductsState['categories']): ProductsState => ({ ...state, categories: payload }),
         SET_CART_ITEMS: (state: CartState, payload: CartState['cartItems']): CartState => ({ ...state, cartItems: payload }),
-        // SET_CATEGORY_PRODUCTS: (state: ProductsState, payload: { id: string, products: ProductData[] }): ProductsState => ({ ...state, categoryProducts: { ...state.categoryProducts, [payload.id]: payload.products } }),
-        // APPEND_CATEGORIES: (state: ProductsState, payload: ProductsState['categories']): ProductsState => ({ ...state, categories: [...state.categories, ...payload] }),
-        // APPEND_PRODUCTS: (state: ProductsState, payload: ProductsState['products']): ProductsState => ({ ...state, products: [...state.products, ...payload] }),
+        SET_ITEM: (state: CartState, payload: CartItem): CartState => ({ ...state, cartItems: { ...state.cartItems, [payload._id]: payload } }),
+        SET_ITEM_QUANTITY: (state: CartState, payload: CartItem): CartState => ({ ...state, cartItems: { ...state.cartItems, [payload._id]: { ...(state.cartItems as CartMap)[payload._id], quantity: payload.quantity } } }),
     },
     effects: (dispatch: Dispatch) => ({
         async appendProducts(payload) {
@@ -28,23 +26,34 @@ export const cart: any = createModel<RootModel>()({
 
             }
         },
+        resetCart() {
+            this.SET_CART_ITEMS(null)
+        },
         async fetchCart(payload) {
             try {
                 const res = await axios.get('/api/cart')
-                console.log(res.data)
-                this.SET_CART_ITEMS(res.data.cartItems)
-                // this.SET_CATEGORIES(res.data.categories)
+                const formattedData: { [cartItemId: string]: CartItem } = {}
+                res.data.cartItems.forEach((cartItem: CartItem) => {
+                    formattedData[cartItem._id] = cartItem
+                });
+                console.log('fetchCart', formattedData)
+                this.SET_CART_ITEMS(formattedData)
             } catch (err) {
-
+                console.error('fetchCart', err)
             }
         },
-        async addToCart(payload) {
-            console.log('addToCart')
+        async addToCart(payload, state) {
             try {
                 const res = await axios.post('/api/cart', payload)
-                console.log(res)
+                console.log('addToCart', res.data.cartItem)
+                const { cartItem } = res.data
+                if (state.cart.cartItems?.[payload._id]) {
+                    this.SET_ITEM_QUANTITY(payload)
+                } else {
+                    this.SET_ITEM(cartItem)
+                }
             } catch (err) {
-                console.error(err)
+                console.error('addToCart', err)
             }
         },
     }),

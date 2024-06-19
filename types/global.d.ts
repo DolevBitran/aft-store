@@ -80,7 +80,7 @@ declare global {
     }
 
     interface CartState {
-        cartItems: CartItem[]
+        cartItems: null | CartMap
     }
 
     type MediaState = {
@@ -94,6 +94,9 @@ declare global {
         },
     }
 
+    interface CartMap {
+        [cartItemId: string]: CartItem
+    }
 
     interface RoomState {
         socket: Socket | null;
@@ -123,6 +126,8 @@ declare global {
         productId: string
         sessionId: string
         product: ProductData
+        quantity: number
+        _id: string
     }
 
     type ImageData = {
