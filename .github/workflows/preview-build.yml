@@ -7,7 +7,7 @@ jobs:
   build-preview:
     runs-on: ubuntu-latest
     permissions:
-      # REQUIRED: Allow updating fingerprint in acton caches
+      # REQUIRED: Allow updating fingerprint in action caches
       actions: write
       # Following permissions are required for private repos
       contents: read
@@ -28,7 +28,7 @@ jobs:
       - name: Create preview builds if needed
         uses: expo/expo-github-action/preview-build@main
         with:
-          command: eas build --profile preview --platform all --verbose
+          command: eas build --profile preview --platform android --verbose
 
       - name: List files
         run: ls -l ./
@@ -37,5 +37,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: expo-artifacts
-          path: '*.apk'  # Adjust the path to match the location of your APKs
+          path: '**/*.apk'  # Adjust the path to match the location of your APKs
           
