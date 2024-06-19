@@ -27,6 +27,7 @@ export const product: any = createModel<RootModel>()({
             }
         },
         async save(payload) {
+            console.log({ payload })
             try {
                 console.log(payload)
                 const res = await axios.post('/api/product', payload)
