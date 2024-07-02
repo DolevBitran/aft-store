@@ -1,25 +1,23 @@
 import React, { useCallback } from 'react';
-import { useFonts } from 'expo-font';
+import { I18nManager, Platform } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { DarkTheme, DefaultTheme, NavigationContainer, ThemeProvider } from '@react-navigation/native';
-import Header from 'components/Header';
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
-import { Provider, useDispatch, useSelector } from 'react-redux';
-import { AppRegistry, I18nManager, Platform } from 'react-native';
 import { Dispatch, store } from 'store';
 import { selectUser } from 'store/selectors/auth.selector';
+import { getRTLMode } from 'store/selectors/app.selector';
+
+import { Stack } from 'expo-router';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useFonts } from 'expo-font';
+import { useColorScheme } from 'hooks/useColorScheme';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import Header from 'components/Header';
 
 import 'expo-dev-client';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { getRTLMode } from 'store/selectors/app.selector';
-import i18n from 'utils/i18n';
-
 import 'react-native-reanimated';
-
-import { useColorScheme } from 'hooks/useColorScheme';
-import { Stack } from 'expo-router';
 import 'expo-router/entry'
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -29,7 +27,6 @@ export const unstable_settings = {
 };
 
 const RootLayout = () => {
-
   // load everything and return Loader until load
 
   return <Provider store={store}>
@@ -38,7 +35,6 @@ const RootLayout = () => {
 }
 
 export default RootLayout;
-
 
 function App() {
   const dispatch = useDispatch<Dispatch>()
@@ -104,7 +100,7 @@ function App() {
                 header: () => null,
               }}>
               {/* <Stack.Screen name="(auth)" options={{ headerShown: false }} /> */}
-              <Stack.Screen name="product" options={{ headerShown: false }} />
+              <Stack.Screen name="product" />
               <Stack.Screen name="+not-found" />
             </Stack>
           </ThemeProvider>

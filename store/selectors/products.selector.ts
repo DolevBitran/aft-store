@@ -3,6 +3,7 @@ import { iRootState } from '..';
 
 export const selectProduct = (state: iRootState): ProductState['product'] => state.product.product
 export const selectCategories = (state: iRootState) => state.products.categories
+export const selectSearchResults = (state: iRootState) => state.products.searchResults
 export const selectProducts = (state: iRootState) => state.products.products
 export const selectCategoryProducts = (state: iRootState) => state.products.categoryProducts
 

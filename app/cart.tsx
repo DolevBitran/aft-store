@@ -28,10 +28,6 @@ const Cart = () => {
         dispatch.cart.fetchCart()
     }, [])
 
-    React.useEffect(() => {
-        console.log({ cart })
-    }, [cart])
-
     if (!cart) {
         return <View style={[styles.container, { backgroundColor: '#fff' }]}>
             <Text>

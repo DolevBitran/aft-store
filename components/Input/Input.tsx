@@ -10,29 +10,36 @@ import {
 import Text from 'components/Text';
 import { Control, useController } from 'react-hook-form';
 import { store } from 'store/index';
+import { WEIGHTS } from '../Text/Text';
 
 type ProductItemProps = {
-    title: string
+    title?: string
     name: string
     control: Control
     inputStyle?: TextStyle
     labelStyle?: TextStyle
     style?: ViewStyle
+    forwardedRef?: React.RefObject<TextInput | undefined>
 } & TextInputProps
 
-const Input = ({ title, name, control, defaultValue, style = {}, inputStyle = {}, labelStyle = {}, ...props }: ProductItemProps) => {
+const Input = ({ title, name, control, defaultValue, style = {}, inputStyle = {}, labelStyle = {}, forwardedRef, ...props }: ProductItemProps) => {
     const { field } = useController({
         control,
         defaultValue: defaultValue || '',
         name
     })
 
+    const { fontWeight } = inputStyle || {}
+    const textStyles: TextStyle = {}
+    // @ts-ignore
+    textStyles.fontFamily = fontWeight ? `Rubik-${WEIGHTS[fontWeight]}` : 'Rubik'
     return (
         <View style={style}>
-            <Text style={[styles.inputLabel, labelStyle]}>{title}</Text>
+            {title && <Text style={[styles.inputLabel, labelStyle, textStyles]}>{title}</Text>}
             <TextInput
+                ref={el => forwardedRef && (forwardedRef.current = el as TextInput)}
                 value={field.value}
-                style={[styles.textInput, inputStyle]}
+                style={[textStyles, styles.textInput, inputStyle]}
                 onChangeText={field.onChange}
                 placeholderTextColor={'#475a6e'}
                 {...props} />
@@ -63,6 +70,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         height: 'auto',
         width: 'auto',
+        // @ts-ignore
         outlineStyle: 'none',
         color: '#475a6e',
     },

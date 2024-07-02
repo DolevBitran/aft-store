@@ -19,13 +19,6 @@ export const cart: any = createModel<RootModel>()({
         SET_ITEM_QUANTITY: (state: CartState, payload: CartItem): CartState => ({ ...state, cartItems: { ...state.cartItems, [payload._id]: { ...(state.cartItems as CartMap)[payload._id], quantity: payload.quantity } } }),
     },
     effects: (dispatch: Dispatch) => ({
-        async appendProducts(payload) {
-            try {
-                this.APPEND_PRODUCTS(payload)
-            } catch (err) {
-
-            }
-        },
         resetCart() {
             this.SET_CART_ITEMS(null)
         },

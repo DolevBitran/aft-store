@@ -11,10 +11,10 @@ let PENDING_REQUESTS = 0
 
 
 type BaseUrl = string;
-const baseURL: string =
-    // 'https://c531-46-116-226-197.ngrok-free.app'
-    // 'http://10.100.102.102:8001'
-    'http://10.100.102.104:8001'
+const baseURL: string = process.env.EXPO_PUBLIC_API_BASE_URL as string
+// 'https://c531-46-116-226-197.ngrok-free.app'
+// 'http://10.100.102.102:8001'
+// 'http://10.100.102.104:8001'
 // 'http://10.100.102.16:8001'
 // 'http:///192.168.1.149:8001'
 

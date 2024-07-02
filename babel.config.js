@@ -23,6 +23,8 @@ module.exports = function (api) {
           ".tsx",
         ]
       }],
+      '@babel/plugin-proposal-export-namespace-from',
+      'react-native-reanimated/plugin'
     ]
   };
 };

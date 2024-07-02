@@ -70,6 +70,7 @@ declare global {
     interface ProductsState {
         categories: Category[]
         products: ProductData[]
+        searchResults: ProductData[]
         categoryProducts: {
             [categoryId: string]: ProductData[]
         }

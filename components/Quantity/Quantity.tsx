@@ -17,7 +17,7 @@ const Quantity = ({ quantity, onQuantityChange }: QuantityProps) => {
     const isDisabled = quantity === 1
     const disabledStyle = { backgroundColor: isDisabled ? 'gray' : '#0673e8' }
 
-    return <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    return <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
         <Pressable role="button" disabled={isDisabled} onPress={() => onQuantityChange(quantity - 1)} style={[styles.quantityButton, disabledStyle]}>
             <Text style={{ fontSize: 16, color: "#fff" }}>-</Text>
         </Pressable>

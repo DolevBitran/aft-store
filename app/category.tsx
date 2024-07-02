@@ -34,7 +34,7 @@ const Category = () => {
         setPage(page => page + 1)
         if (shouldFetchMore) {
             console.log('shouldFetchMore')
-            // dispatch.products.appendProducts(products)
+            // fetch next page
         }
     }
 
@@ -54,7 +54,6 @@ const Category = () => {
     </>
 
     if (!category) {
-        console.log({ category, id })
         return null
     }
 

@@ -19,10 +19,8 @@ import i18n from 'utils/i18n';
 
 const Dashboard = () => {
     const dispatch = useDispatch<Dispatch>()
-    console.log({ app: dispatch.app })
     const onCreateButtonPressed = () => dispatch.app.navigateTo('create')//bottomSheetRef.current && bottomSheetRef.current.scrollTo(snapPoints[1])
     const onStoreButtonPressed = () => dispatch.app.navigateTo('store')//bottomSheetRef.current && bottomSheetRef.current.scrollTo(snapPoints[1])
-
 
     const CardHeader = ({ title, color }: { title: string, color?: ColorValue }) => <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignSelf: 'center', width: '86%' }}>
         <Text style={{ fontWeight: '600', fontSize: 20, color: color || 'white' }}>{title}</Text>

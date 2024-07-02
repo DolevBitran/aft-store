@@ -4,7 +4,7 @@ import { StyleSheet, Text, TextProps } from 'react-native';
 export interface IAppTextProps extends TextProps {
 }
 
-const WEIGHTS = {
+export const WEIGHTS = {
     100: '100',
     200: '200',
     300: '300',

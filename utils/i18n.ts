@@ -46,7 +46,7 @@ const i18n = new I18n({
             loginSubtitle: "בחר את שיטת ההתחברות הרצויה",
             googleLogin: "התחברות עם גוגל",
         },
-        searchBar: "חפש שם של מוצר, בגד או מכשיר חשמלי",
+        searchBar: "חפש שם של מוצר",
         storeOverview: "סקירת חנות",
         storeOverviewText: "סך המוצרים בחנות: %{count}",
         newProductButton: "הוסף מוצר חדש",

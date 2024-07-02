@@ -25,7 +25,7 @@ const Store = () => {
 
     const onEndReached = () => {
         console.log('onEndReached')
-        // dispatch.products.appendProducts(products)
+        // fetch next page
     }
 
     const ListTitle = ({ title }: { title: string }) => <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignSelf: 'center', width: '86%', }}>

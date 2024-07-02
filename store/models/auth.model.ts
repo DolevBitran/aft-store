@@ -86,7 +86,7 @@ export const auth: any = createModel<RootModel>()({
             try {
                 const res: AxiosResponse<UserLoginResponse> = await axios.get('/auth/google/login', { headers: { Authorization: `Bearer ${accessToken}` } })
                 const { data } = res
-                console.log(res)
+                console.log(data)
 
                 await AsyncStorage.setItem('@user', JSON.stringify(data.user))
                 dispatch.auth.setUser(data.user)

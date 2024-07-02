@@ -1,6 +1,6 @@
-import { animated, useSpring } from 'react-spring';
+import { animated, useSpring, Controller, useSpringValue } from 'react-spring';
 
 const AnimatedView = animated('div')
 
 export default AnimatedView;
-export { useSpring };
+export { useSpring, useSpringValue, animated, Controller };

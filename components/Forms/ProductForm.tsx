@@ -88,8 +88,6 @@ const ProductForm = ({ }: ProductFormProps) => {
 
     const onSubmit = (data: any) => dispatch.product.save({ ...data, media: { images: productAssets.map(asset => asset._id) } })
     const onImagesSelected = async (result: ImagePickerResult) => {
-        // No permissions request is necessary for launching the image library
-
         if (result.assets?.length) {
             const fileExtension = Platform.OS === 'web' ?
                 result.assets[0].uri.substring("data:image/".length, result.assets[0].uri.indexOf(";base64")) :
@@ -128,7 +126,7 @@ const ProductForm = ({ }: ProductFormProps) => {
                 control={control}
                 data={categories}
                 placeholder={i18n.translate('productForm.selectCategory')}
-                onSelect={console.log}
+                onSelect={() => { }}
             />
             <View style={{ width: 20 }} />
             <Input

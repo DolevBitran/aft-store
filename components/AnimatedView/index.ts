@@ -1,4 +1,4 @@
-import AnimatedView, { useSpring } from "./AnimatedView";
+import AnimatedView, { useSpring, useSpringValue, animated, Controller } from "./AnimatedView";
 
 export default AnimatedView;
-export { useSpring };
+export { useSpring, useSpringValue, animated, Controller };
