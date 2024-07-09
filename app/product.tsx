@@ -9,7 +9,7 @@ import {
     Image,
     Pressable,
     useWindowDimensions,
-    Animated
+    FlatList
 } from 'react-native';
 import Text from 'components/Text';
 import SkeletonItem from 'components/SkeletonItem';
@@ -22,8 +22,11 @@ import i18n from '@/utils/i18n';
 import Quantity from '@/components/Quantity';
 
 
-import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
-import { useSharedValue } from 'react-native-reanimated';
+// import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
+// import { useSharedValue } from 'react-native-reanimated';
+import { SpringValue, useSpringValue } from 'react-spring';
+import { getRTLMode } from '@/store/selectors/app.selector';
+import AnimatedView, { animated } from '@/components/AnimatedView';
 
 
 const wWidth = Dimensions.get('window').width
@@ -49,7 +52,7 @@ const Product = () => {
     const isCartLoading = useSelector((state: iRootState) => state.loading.models.cart.loading)
     const disabledStyle = { backgroundColor: isCartLoading ? 'gray' : '#0673e8' }
 
-    const forwardedRef = React.createRef<ICarouselInstance>()
+    const forwardedRef = React.createRef<FlatList>()
 
     React.useEffect(() => {
         if (id) {
@@ -59,10 +62,6 @@ const Product = () => {
 
     const addToCart = () => {
         dispatch.cart.addToCart({ quantity, productId: id })
-    }
-
-    const scrollToCarouselIndex = (index: number) => {
-        forwardedRef.current?.scrollTo?.({ index, animated: true })
     }
 
     const onQuantityChange = (quantity: number) => setQuantity(quantity)
@@ -119,84 +118,125 @@ const Product = () => {
     </View>
 };
 
+const CarouselComponent = ({ product, forwardedRef }: { product: ProductData, forwardedRef: React.RefObject<FlatList> }) => {
+    const itemWidth = wWidth
+    const data = [
+        {
+            source: product.media.images[0].source,
+            index: 0
+        },
+        {
+            source: product.media.images[0].source,
+            index: 1
+        },
+        {
+            source: product.media.images[0].source,
+            index: 2
+        },
+    ]
+    const [currentIndex, setCurrentIndex] = React.useState<number>(0);
 
-const CarouselComponent = ({ product, forwardedRef }: { product: ProductData, forwardedRef: React.RefObject<ICarouselInstance> }) => {
-    const scrollOffsetValue = useSharedValue<number>(0);
-    const { width, height } = useWindowDimensions()
-    const scrollX = React.useRef(new Animated.Value(0)).current
-    const scrollToCarouselIndex = (index: number) => {
-    }
-    const arr = [1, 2, 3]
+    const slideRef = React.useRef<FlatList<IAsset> | null>()
+    const scrollX = useSpringValue(0)
+
+    React.useEffect(() => {
+        if (isRTL && Platform.OS === 'android') {
+            scrollX.set(itemWidth * 2)
+        }
+    })
+    const viewabilityConfig = { viewAreaCoveragePercentThreshold: 50 }
+
+    const onViewableItemsChanged = () => { } // ({viewableItems}) => setCurrentIndex(viewableItems[0].index as number)
+    const viewabilityConfigCallbackPairs = React.useRef([{ viewabilityConfig, onViewableItemsChanged }])
+
+    const shouldReverse = isRTL && Platform.OS === 'android'
 
     return <>
-        {arr.map((el, index) => <ListIteeem key={index} el={el} index={index} scrollX={scrollX} product={product} />)}
-        <Carousel
-            ref={forwardedRef}
-            loop={false}
-            vertical={false}
-            defaultScrollOffsetValue={scrollOffsetValue}
-            onProgressChange={(_, absoluteProgress) => {
-                // console.log({ absoluteProgress })
-                scrollX.setValue(absoluteProgress)
-            }}
-            style={{ width: "100%" }}
-            // autoPlay={true}
-            // autoPlayInterval={100}
-            onConfigurePanGesture={g => g.enabled(false)}
-            pagingEnabled={true}
-            snapEnabled
-            width={width}
-            height={width * 0.6}
-            data={[1, 2, 3, 4, 5]}
-            onSnapToItem={(index: number) => console.log('current index:', index)}
-            renderItem={({ index }: { index: number }) => (
-                <View
-                    key={index}
-                    style={{
-                        flex: 1,
-                        justifyContent: 'center',
-                    }}
-                >
-                    <Image style={styles.imageStyle} source={{ uri: product.media.images[0].source }} />
-                </View>
-            )}
-        />
+        <View style={{ alignItems: 'center', flex: 1 }}>
+            <FlatList
+                style={{ width: itemWidth, flexDirection: 'row' }}
+                data={shouldReverse ? data.reverse() : data}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                pagingEnabled
+                bounces={false}
+                renderItem={({ item }: { item: { source: string, index: number } }) => (
+                    <View
+                        key={item.index}
+                        style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <Image style={styles.imageStyle} source={{ uri: item.source }} />
+                    </View>
+                )}
+                onScroll={event => scrollX.set(Math.abs(event.nativeEvent.contentOffset.x))}
+                scrollEventThrottle={32}
+                viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
+                keyExtractor={(item: { index: number, source: string }) => item.index.toString()}
+                ref={ref => forwardedRef.current = ref}
+                initialScrollIndex={0} // specify last index
+                initialNumToRender={data.length}
+            />
+            {data.map((el, index) => <ThumbItem onPress={() => forwardedRef.current?.scrollToIndex({ index, animated: true })}
+                key={index} el={el} index={el.index} scrollX={scrollX} itemWidth={itemWidth} product={product} />)}
+            <Paginator data={data} scrollX={scrollX} itemWidth={itemWidth} />
+        </View>
     </>
 }
 
-const ListIteeem = ({ el, index, scrollX, product }: { el: any, index: number, scrollX: Animated.Value, product: ProductData }) => {
 
+const Paginator = ({ data, scrollX, itemWidth }: { data: any[], scrollX: SpringValue<number>, itemWidth: number }) => {
+    const RTL_Mode = useSelector(getRTLMode)
+
+    return <View style={{ flexDirection: Platform.OS !== 'web' && RTL_Mode ? 'row-reverse' : 'row', margin: 20, backgroundColor: 'transparent' }}>
+        {data.map((item: IAsset, index: number) => {
+            const inputRange = [(index - 1) * itemWidth, index * itemWidth, (index + 1) * itemWidth];
+            console.log(scrollX.get())
+            const dotWidth = scrollX.to(inputRange, [8, 16, 8], 'clamp')
+            const dotColor = scrollX.to(inputRange, ['#b9b9b9', '#808080', '#b9b9b9'], 'clamp')
+
+            return <AnimatedView style={{ height: 8, borderRadius: 4, backgroundColor: dotColor, width: dotWidth, marginRight: 8, marginLeft: 8 }} key={index} />
+        })}
+    </View>
+}
+
+const ThumbItem = ({ el, itemWidth, index, onPress, scrollX, product }: { el: any, index: number, itemWidth: number, onPress: () => void, scrollX: SpringValue, product: ProductData }) => {
     const inputRange = [
-        (index - 1),
-        index,
-        (index + 1),
+        (index - 1) * itemWidth,
+        index * itemWidth,
+        (index + 1) * itemWidth
     ];
 
-
-    const elevation = scrollX.interpolate({
+    const elevation = scrollX.to(
         inputRange,
-        outputRange: [0, 2, 0],
-        extrapolate: "clamp",
-    });
+        [0, 2, 0],
+        "clamp"
+    );
 
-    const boxShadow = scrollX.interpolate({
+    const boxShadow = scrollX.to(
         inputRange,
-        outputRange: [0, 0.3, 0],
-        extrapolate: "clamp",
-    });
+        [`0px 0px 8px 1px rgba(0, 0, 0, 0)`, `0px 0px 8px 1px rgba(0, 0, 0, 0.3)`, `0px 0px 8px 1px rgba(0, 0, 0, 0)`],
+        "clamp"
+    );
+    const AnimtedPressable = animated(Pressable)
 
-    return <Animated.View style={[styles.smallImageContainer, {
-        top: 20 + index * 60, left: 20,
-        boxShadow: `0px 0px 8px 1px rgba(0, 0, 0, ${boxShadow}})`,
-        elevation: elevation,
-        // @ts-ignore
-        shadowOffset: { width: 10, height: 10 },
-        shadowRadius: 0,
-        shadowColor: 'blue',
-        shadowOpacity: 1,
-    }]}>
-        <Image style={styles.imageSmallStyle} source={{ uri: product.media.images[0].source }} />
-    </Animated.View>
+    return <AnimtedPressable
+        onPress={onPress}
+        style={{
+            ...styles.smallImageContainer,
+            top: 20 + index * 60, left: 20,
+            boxShadow: boxShadow,
+            // @ts-ignore
+            elevation: elevation,
+            shadowOffset: { width: 10, height: 10 },
+            shadowRadius: 0,
+            shadowColor: 'blue',
+            shadowOpacity: 1,
+        }}>
+        <Image style={styles.imageSmallStyle} source={{ uri: el.source }} />
+    </AnimtedPressable >
 }
 
 
@@ -233,8 +273,9 @@ const styles = StyleSheet.create({
     },
     smallImageContainer: {
         borderWidth: 1,
-        borderColor: 'green',
+        // borderColor: 'green',
         borderRadius: 6,
+        borderStyle: 'solid',
         height: 40,
         width: 40,
         position: 'absolute',
